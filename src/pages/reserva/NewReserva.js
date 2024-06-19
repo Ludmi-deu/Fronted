@@ -48,8 +48,8 @@ const NewReserva = () => {
 
         try {
             const datosReserva = {
-                propiedadId: propiedadId,
-                inquilinoId: inquilinoId,
+                propiedad_id: propiedadId,
+                inquilino_id: inquilinoId,
                 fecha_desde: fechaDesde,
                 cantidad_noches: cantidadNoches,
                 valor_noche: valorNoche,
