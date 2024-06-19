@@ -24,7 +24,7 @@ root.render(
         <Route path="/tipo-propiedad/editar/:id/:nombre" element={<EditTipoPropiedad />} />
         <Route path="/tipoPropiedad/nuevo" element={<NewTipoPropiedad />}/>
         <Route path="/tipoPropiedad" element={<TipoPropiedadPage />}/>
-       
+        <Route path="/reservas" element={<ReservaPage />}/>
         <Route path="/reservas/nuevo" element={<NewReserva />}/>
       </Routes>
     </BrowserRouter>

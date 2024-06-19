@@ -137,6 +137,7 @@ const ReservaPage = () => {
               <h2>{reservas.nombreCompleto}</h2>
               <div className="card-details">
                 <p>Propiedad: {reservas.domicilio}</p>
+                <p>Inquilino: {reservas.nombreCompleto}</p>
                 <p>Fecha desde: {reservas.fecha_desde}</p>
                 <p>Cantidad de noches: {reservas.cantidad_noches}</p>
                 <p>Valor total: {reservas.valor_total}</p>
