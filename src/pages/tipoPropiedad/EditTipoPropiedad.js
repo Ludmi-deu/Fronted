@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useLocation  } from 'react-router-dom';
+import { useParams, useLocation, useNavigate   } from 'react-router-dom';
 import './EditTipoPropiedad.css';
 
 
 const EditTipoPropiedad = () => {
-
-
   
-  const { id } = useParams(); // Obtener el ID del tipo de propiedad desde la URL
+  const { id, nombre } = useParams();
+  const [nombreEditado, setNombreEditado] = useState(nombre); // Usar el nombre obtenido de la URL
   const location = useLocation(); // Obtener el state de la ubicación
-  const [nombre, setNombre] = useState(location.state?.nombre || '')
   const [mensaje, setMensaje] = useState('');
+  const navigate = useNavigate(); // Obtener la función de navegación
+
+  const handleVolver = () => {
+    navigate(-1); 
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (nombre.trim() === '') {
+    if (nombreEditado.trim() === '') {
       setMensaje('El nombre es obligatorio');
       return;
     }
@@ -26,7 +29,7 @@ const EditTipoPropiedad = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ nombre }),
+        body: JSON.stringify({ nombre: nombreEditado }), 
       });
 
       if (!response.ok) {
@@ -50,13 +53,18 @@ const EditTipoPropiedad = () => {
           <input
             type="text"
             id="nombre"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
+            value={nombreEditado} // Usar el nuevo estado
+            onChange={(e) => setNombreEditado(e.target.value)}
           />
         </div>
         <button type="submit">Guardar Cambios</button>
       </form>
-      {mensaje && <p>{mensaje}</p>}
+      <button type="button" onClick={handleVolver}>Volver</button> {/* Botón Volver */}
+      {mensaje && (
+        <p className={`mensaje-${mensaje.includes('Error') ? 'error' : 'exito'} mostrar`}>
+          {mensaje}
+        </p>
+      )}
     </div>
   );
 };
