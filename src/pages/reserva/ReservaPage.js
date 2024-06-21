@@ -64,7 +64,7 @@ const ReservaPage = () => {
         <ul className="reservas-list">
           {reservas.map((reserva) => (
             <li key={reserva.id} className="reservas-card">
-              <h2>{`${reserva.nombre} ${reserva.apellido}`}</h2>
+              <h2>{`${reserva.nombre_inquilino} ${reserva.apellido_inquilino}`}</h2>
               <div className="card-details">
                 <p>Propiedad: {reserva.domicilio}</p>
                 <p>Fecha desde: {reserva.fecha_desde}</p>
