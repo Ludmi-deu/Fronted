@@ -120,19 +120,23 @@ const EditReservaPage = () => {
       if (response.ok) {
         const data = await response.json();
         if (data.status === 'success') {
+          console.log('success');
           setExito(data.message);
           mostrarExitoOn();
           setReserva(await fetchReservaPorId(id));
         } else {
+          console.log('error: no success ',data.message);
           setError(data.message);
           mostrarErrorOn();
         }
       } else {
+        const errorResponse = await response.json();
+        setError(errorResponse.message || 'Error desconocido');
         mostrarErrorOn();
       }
     } catch (error) {
       console.log(error);
-      setError(error);
+      setError(error.message || 'Error desconocido');
       mostrarErrorOn();
     }
   };
@@ -193,6 +197,9 @@ const EditReservaPage = () => {
       ) : (
         <p>Cargando reserva...</p>
       )}
+
+
+
     </div>
   );
 };

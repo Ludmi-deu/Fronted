@@ -4,7 +4,28 @@ import { Link } from 'react-router-dom';
 
 const ReservaPage = () => {
   const [reservas, setReservas] = useState([]);
+  const [exito, setExito] = useState(false);
   const [error, setError] = useState(null);
+  const [mostrarError, setMostrarError] = useState(false); 
+  const [mostrarExito, setMostrarExito] = useState(false);
+
+  function mostrarErrorOn() {
+    setMostrarError(true);
+    setTimeout(() => {
+        setMostrarError(false);
+        setError(null);
+        setExito(null);
+    }, 5000);
+  }
+
+  function mostrarExitoOn(){
+    setMostrarExito(true);
+    setTimeout(() => {
+        setMostrarExito(false);
+        setError(null);
+        setExito(null);
+    }, 5000);
+  }
 
   useEffect(() => {
     const fetchReservas = async () => {
@@ -20,18 +41,19 @@ const ReservaPage = () => {
           throw new Error(data.message || 'Error desconocido en la API');
         }
       } catch (error) {
-        console.error('Error al obtener las reservas:', error);
+        console.error('Error al obtener las reservas:');
         setError(error.message);
+        mostrarErrorOn()
       }
     };
 
     fetchReservas();
   }, []);
 
-  const handleEliminarReserva = async (id) => {
-    if (window.confirm(`¿Estás seguro de que quieres eliminar la reserva con ID ${id}?`)) {
+  const handleEliminarReserva = async (EliminarReserva) => {
+    if (window.confirm(`¿Estás seguro de que quieres eliminar la reserva con fecha de inicio ${EliminarReserva.fecha_desde}?`)) {
       try {
-        const response = await fetch(`http://localhost/reservas/${id}`, {
+        const response = await fetch(`http://localhost/reservas/${EliminarReserva.id}`, {
           method: 'DELETE',
         });
 
@@ -39,11 +61,19 @@ const ReservaPage = () => {
           throw new Error('Error en la respuesta de la API');
         }
 
-        // Actualizar lista de reservas después de eliminación
-        setReservas(reservas.filter(reserva => reserva.id !== id));
-      } catch (error) {
-        console.error('Error al eliminar la reserva:', error);
-        setError('Error al eliminar la reserva');
+        const data = await response.json();
+        if (data.status === 'success') {
+        setReservas(reservas.filter(reserva => reserva.id !== EliminarReserva.id));
+        setExito(data.message);
+        mostrarExitoOn()
+      } else {
+        setError(data.message || 'Error desconocido en la API');
+        mostrarErrorOn()
+      }
+    } catch (error) {
+      console.error('Error al eliminar la reserva:', error);
+      setError('Error al eliminar la reserva');
+      mostrarErrorOn()
       }
     }
   };
@@ -52,7 +82,11 @@ const ReservaPage = () => {
     <div className="reservas-page">
       <h1>Reservas</h1>
 
-      {error && (
+      {exito && mostrarExito && (
+        <p className="mensaje-exito mostrar">{exito}</p>
+    ) }
+
+      {error && mostrarError &&  (
         <p className="error-message mostrar">Error: {error}</p>
       )}
 
@@ -81,7 +115,7 @@ const ReservaPage = () => {
                 >
                   <button className="btn-editar">Editar</button>
                 </Link>
-                <button className="btn-eliminar" onClick={() => handleEliminarReserva(reserva.id)}>Eliminar</button>
+                <button className="btn-eliminar" onClick={() => handleEliminarReserva(reserva)}>Eliminar</button>
               </div>
             </li>
           ))}
