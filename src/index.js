@@ -11,6 +11,10 @@ import FooterComponent from './components/FooterComponent';
 import ReservaPage from './pages/reserva/ReservaPage';
 import NewReserva from './pages/reserva/NewReserva'
 import EditReserva from './pages/reserva/EditReserva';
+import DetailPropiedad from './pages/propiedad/DetailPropiedad';
+import EditPropiedad from './pages/propiedad/EditPropiedad';
+import NewPropiedad from './pages/propiedad/NewPropiedad';
+import PropiedadPage from './pages/propiedad/PropiedadPage';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -19,6 +23,10 @@ root.render(
     <HeaderComponent/>
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<PropiedadPage />}/>
+        <Route path="/propiedad/editar/:id" element={<EditPropiedad />}/>
+        <Route path="/propiedad/nuevo" element={<NewPropiedad />}/>
+        <Route path="/propiedad/:id" element={<DetailPropiedad />}/>
         <Route path="/tipo-propiedad/editar/:id/:nombre" element={<EditTipoPropiedad />} />
         <Route path="/tipoPropiedad/nuevo" element={<NewTipoPropiedad />}/>
         <Route path="/tipoPropiedad" element={<TipoPropiedadPage />}/>

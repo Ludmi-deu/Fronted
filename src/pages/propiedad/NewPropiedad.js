@@ -1,17 +1,18 @@
 import React, {useState,useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
-import './PropiedadEditPage.css'; // Asegúrate de tener este archivo CSS
+import './PropiedadEditPage.css'; 
 
-import { fetchLocalidades, fetchTiposPropiedad } from 'D:/PHP/inmobiliaria/src/utils/api.js';
+import { fetchLocalidades, fetchTiposPropiedad } from '../../utils/api';
 
 
-const NewPropiedadPage = () => {
+const NewPropiedad = () => {
 
     const navigate = useNavigate();
     const { id } = useParams();
     const [propiedad, setPropiedad] = useState(null);
     const [localidades,setLocalidades] = useState([]);
     const [tiposPropiedad,setTipoPropiedad] = useState([]);
+    
     const [mostrarError, setMostrarError] = useState(false);
     const [mostrarExito, setMostrarExito] = useState(false);
     const [exito, setExito] = useState(false);
@@ -68,8 +69,10 @@ const NewPropiedadPage = () => {
         };
 
         event.preventDefault();
+
         const formData = new FormData(event.target);
-        
+        const dataToSend = formDataToObject(formData);
+
         const domicilio = formData.get('domicilio');
         const localidadId = formData.get('localidad_id');
         const cantidadHabitaciones = formData.get('cantidad_habitaciones');
@@ -78,37 +81,37 @@ const NewPropiedadPage = () => {
         const fechaInicioDisponibilidad = formData.get('fecha_inicio_disponibilidad');
         const cantidadDias = formData.get('cantidad_dias');
         const valorNoche = formData.get('valor_noche');
+        const imagen = formData.get('imagen');
+        
+        if (imagen) {
+            const nombreImagen = imagen.name.split('.')[0]; // Nombre sin extensión
+            const extensionImagen = imagen.name.split('.').pop(); // Extensión
+
+            dataToSend.imagen = nombreImagen;
+            dataToSend.tipo_imagen = extensionImagen;
+        }
 
 
-        if (domicilio.trim() === '') { // trim() elimina espacios en blanco al principio y al final
+        if (domicilio.trim() === '') { 
             setError('El domicilio es obligatorio.');
             mostrarErrorOn();
-            return; // Detener el envío del formulario si la validación falla
+            return; 
         }
 
-        if (localidadId === '') { // Verifica si se ha seleccionado una localidad (el valor no es una cadena vacía)
+        if (localidadId === '') { 
             setError('Debes seleccionar una localidad.');
             mostrarErrorOn();
-            return; // Detener el envío del formulario si la validación falla
+            return; 
         }
 
-        if (cantidadHabitaciones.trim() === ''){
-            setError('La cantidad de habitaciones no puede estar vacío.');
-            mostrarErrorOn();
-            return;
-        } else if(!/^\d+$/.test(cantidadHabitaciones)) {
-            setError('La cantidad de huéspedes debe ser un número entero.');
-            mostrarErrorOn();
-            return;
-        }
-        if (cantidadBanios.trim() === ''){
-            setError('La cantidad de baños no puede estar vacío.');
-            mostrarErrorOn();
-            return;
-        } else if(!/^\d+$/.test(cantidadBanios)) {
-            setError('La cantidad de baños debe ser un número entero.');
-            mostrarErrorOn();
-            return;
+        if (cantidadHabitaciones != ''){
+            if(!/^\d+$/.test(cantidadHabitaciones)) {
+                setError('La cantidad de huéspedes debe ser un número entero.');
+                mostrarErrorOn();
+                return;
+            }
+        } else {
+            delete dataToSend.cantidad_habitaciones;
         }
 
         if (cantidadHuespedes.trim() === ''){
@@ -119,6 +122,17 @@ const NewPropiedadPage = () => {
             setError('La cantidad de huéspedes debe ser un número entero.');
             mostrarErrorOn();
             return;
+        }
+
+
+        if (cantidadBanios !=  ''){
+            if(!/^\d+$/.test(cantidadBanios)) {
+            setError('La cantidad de baños debe ser un número entero.');
+            mostrarErrorOn();
+            return;
+            }
+        } else {
+            delete dataToSend.cantidad_banios;
         }
         
         if (fechaInicioDisponibilidad.trim() === '') {
@@ -137,7 +151,6 @@ const NewPropiedadPage = () => {
             return;
           }
         
-          // Validación de valor_noche
         if (valorNoche.trim() === '') {
             setError('El valor por noche no puede estar vacío.');
             mostrarErrorOn();
@@ -150,13 +163,12 @@ const NewPropiedadPage = () => {
 
         try {
 
-            const dataToSend = formDataToObject(formData);
             const response = await fetch(`http://localhost/propiedades`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(dataToSend),
+                body: JSON.stringify(dataToSend)
               });
 
             if(response.ok){
@@ -177,7 +189,7 @@ const NewPropiedadPage = () => {
 
         } catch(error){
             console.log('error ', error);
-            setError(error);
+            setError(error.message);
             mostrarErrorOn();
         }
     }
@@ -196,7 +208,7 @@ const NewPropiedadPage = () => {
                 </p>
             )} 
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} encType="multipart/form-data">
 
                 <div>
                     <label htmlFor='domicilio'>Domicilio: </label>
@@ -265,6 +277,12 @@ const NewPropiedadPage = () => {
                         ))}
                     </select>
                 </div>
+                <div>
+                    <div>
+                        <label htmlFor="imagen">Ingrese una imagen:</label> {/* Etiqueta para el campo de imagen */}
+                        <input type="file" name="imagen" id="imagen" /> 
+                    </div>
+                </div>
                 <button type='submit'>guardar</button>
                 <button type="button" onClick={() => navigate(-1)}>Volver</button>
             </form>
@@ -273,4 +291,4 @@ const NewPropiedadPage = () => {
     );
 };
 
-export default NewPropiedadPage;
+export default NewPropiedad;
