@@ -41,6 +41,25 @@ export const fetchLocalidades = async () => {
     }
   };
 
+
+  export const fetchDomicilio = async (propiedadId) => {
+    try {
+      const response = await fetch(`http://localhost/propiedades/${propiedadId}`);
+  
+      if (!response.ok) {
+        throw new Error('Error en la respuesta de la API');
+      }
+  
+      const data = await response.json();
+      return data.data.domicilio; // Suponiendo que el objeto de respuesta tiene un campo data con los datos de la propiedad y dentro de ellos el domicilio
+    } catch (error) {
+        throw new Error(`Error al obtener el domicilio: ${error.message}`);
+    }
+  };
+
+
+
+
   export const fetchInquilinos = async () => {
     try {
       const response = await fetch('http://localhost/inquilinos');
@@ -63,50 +82,113 @@ export const fetchLocalidades = async () => {
     }
   };
 
-/*  export const crearReserva = async (datosReserva) => {
+
+  export const fetchInquilinoPorId = async (inquilinoId) => {
     try {
-      const response = await fetch('http://localhost/reservas', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(datosReserva),
-      });
+      const response = await fetch(`http://localhost/inquilinos/${inquilinoId}`);
+  
+      if (!response.ok) {
+        throw new Error('Error en la respuesta de la API');
+        }
+      const data = await response.json();
+        return data.data; // Suponiendo que el objeto de respuesta tiene un campo data con los datos del inquilino
+      } catch (error) {
+        throw new Error(`Error al obtener el inquilino: ${error.message}`);
+      }
+  };
+
+  export const fetchReservas = async () => {
+    try {
+      const response = await fetch('http://localhost/reservas');
   
       if (!response.ok) {
         throw new Error('Error en la respuesta de la API');
       }
   
       const data = await response.json();
-      return data;
+      
+  
+      if (data.status === 'success') {
+        return data.data;
+      } else {
+        throw new Error(data.message || 'Error desconocido al cargar las reservas');
+      }
     } catch (error) {
-      console.error('Error al crear la reserva:', error);
-      return { error: error.message };
+      console.error('Error al cargar las reservas:', error);
+      throw error; // Re-lanzar el error para que pueda ser manejado en el componente
     }
-  };*/
+  };
 
- /*const processedReservas = data.data.map((reserva) => {
-    // Obtener el domicilio de la tabla "propiedad"
-    const propiedadResponse = await fetch(`http://localhost/propiedad/${reserva.propiedad_id}`);
-    if (!propiedadResponse.ok) {
-      throw new Error('Error al obtener la propiedad');
+
+  export const fetchTiposPropiedad = async () => {
+    try {
+      const response = await fetch('http://localhost/tipos_propiedad'); // Tu endpoint de tipos de propiedad
+  
+      if (!response.ok) {
+        throw new Error('Error en la respuesta de la API');
+      }
+  
+      const data = await response.json();
+  
+      if (data.status === 'success') {
+        return data.data; // Devolver los tipos de propiedad
+      } else {
+        throw new Error(data.message || 'Error desconocido al cargar los tipos de propiedad');
+      }
+    } catch (error) {
+      console.error('Error al cargar los tipos de propiedad:', error);
+      throw error; // Re-lanzar el error para manejarlo en el componente
     }
-    const propiedadData = await propiedadResponse.json();
-    const domicilio = propiedadData.data.domicilio;
+  };
 
-    // Obtener nombre y apellido de la tabla "inquilino"
-    const inquilinoResponse = await fetch(`http://localhost/inquilino/${reserva.inquilino_id}`);
-    if (!inquilinoResponse.ok) {
-      throw new Error('Error al obtener el inquilino');
+
+  export const fetchPropiedadPorId = async (propiedadId) => {
+    try {
+      const response = await fetch(`http://localhost/propiedades/${propiedadId}`);
+  
+      if (!response.ok) {
+        throw new Error('Error en la respuesta de la API');
+      }
+  
+      const data = await response.json();
+  
+      if (data.status === 'success') {
+        return data.data[0]; // Devolver la propiedad
+      } else {
+        throw new Error(data.message || 'Error desconocido al cargar la propiedad');
+      }
+    } catch (error) {
+      console.error('Error al cargar la propiedad:', error);
+      throw error; // Re-lanzar el error
     }
-    const inquilinoData = await inquilinoResponse.json();
-    const nombre = inquilinoData.data.nombre;
-    const apellido = inquilinoData.data.apellido;
+  };
+  
+  // fetchReservaPorId.js
 
-    // Combinar los datos procesados
-    return {
-      ...reserva,
-      domicilio,
-      nombreCompleto: `${nombre} ${apellido}`,
-    };
-  });*/
+ export const fetchReservaPorId = async (id) => {
+    try {
+      const response = await fetch(`http://localhost/reservas`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      const data = await response.json();
+      console.log('Respuesta de la API:', data); // Verificar la respuesta completa de la API
+  
+      const reservas = data.data;
+      console.log('Reservas:', reservas); // Verificar las reservas
+  
+      const reserva = reservas.find((reserva) => reserva.id === parseInt(id, 10));
+      if (!reserva) {
+        console.log(`No se encontró la reserva con id ${id}`); // Verificar si la reserva existe
+        throw new Error(`Reserva no encontrada con id ${id}`);
+      }
+  
+      return reserva;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };

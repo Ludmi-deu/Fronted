@@ -1,22 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './PropiedadPage.css'; // Asegúrate de tener este archivo CSS
-/*import { fetchLocalidades } from '../../utils/api';
+import { fetchLocalidades } from 'D:/PHP/inmobiliaria/src/utils/api.js';
 
 const PropiedadPage = () => {
 
   const [propiedades, setPropiedades] = useState([]);
   const [filtros, setFiltros] = useState({
-    disponible: false,
+    disponible: true,
     localidad_id: '',
     fecha_inicio_disponibilidad: '',
     cantidad_huespedes: '',
   });
 
+
+  const [exito, setExito] = useState(false);
   const [error, setError] = useState(null);
   const [mostrarError, setMostrarError] = useState(false);
   const [mostrarExito, setMostrarExito] = useState(false);
   const [localidades, setLocalidades] = useState([]); // Estado para las localidades
+
+  function mostrarErrorOn() {
+    setMostrarError(true);
+    setTimeout(() => {
+        setMostrarError(false);
+        setError(null);
+        setExito(null);
+    }, 5000);
+  }
+
+  function mostrarExitoOn(){
+    setMostrarExito(true);
+    setTimeout(() => {
+        setMostrarExito(false);
+        setError(null);
+        setExito(null);
+    }, 5000);
+  }
 
   useEffect(() => {
 
@@ -48,11 +68,7 @@ const PropiedadPage = () => {
       } catch (error) {
         console.error('Error al obtener las propiedades:', error);
         setError(error.message);
-        setMostrarError(true);
-        setTimeout(() => {
-          setMostrarError(false);
-          setError(null);
-        }, 5000); // Ocultar el mensaje después de 5 segundos
+        mostrarErrorOn() // Ocultar el mensaje después de 5 segundos
       }
     };
 
@@ -95,27 +111,16 @@ const PropiedadPage = () => {
         const data = await response.json();
         if (data.status === 'success') {
           setPropiedades(propiedades.filter(propiedad => propiedad.id !== propiedadId));
-          setMostrarExito(true);
-          setTimeout(() => {
-            setMostrarExito(false);
-            setError(null);
-          }, 2000);
+          setExito(data.message);
+          mostrarExitoOn()
         } else {
           setError(data.message || 'Error desconocido en la API');
-          setMostrarError(true);
-          setTimeout(() => {
-            setMostrarError(false);
-            setError(null);
-          }, 5000);
+          mostrarErrorOn()
         }
       } catch (error) {
         console.error('Error al eliminar la propiedad:', error);
         setError('Error al eliminar la propiedad');
-        setMostrarError(true);
-        setTimeout(() => {
-          setMostrarError(false);
-          setError(null);
-        }, 5000);
+        mostrarErrorOn()
       }
     }
   };
@@ -124,33 +129,27 @@ const PropiedadPage = () => {
     
     <div className="tipo-propiedad-page">
       <h1>Propiedades</h1>
-
-      */
   
       {/* Mensaje de error */}
-      /*
       {error && mostrarError && (
         <p className="error-message mostrar">Error: {error}</p>
       )}
-      */
+      
       {/* Mensaje de éxito */}
-
-      /*
-      {mostrarExito && (
+      {exito && mostrarExito && (
         <p className="mensaje-exito mostrar">
-          <span className="icono-exito">\f00c</span> Tipo de propiedad eliminado con éxito
+          {exito}
         </p>
       )} 
   
-      */
+      
       {/* Formulario de filtros */}
-      /*
       <div className="contenido-principal">
       <form>
         <div className="filtros-container">
           <div className="filtro">
                 <label htmlFor="disponible">Disponible:</label>
-                <div className="checkbox-container"> 
+                <div className="checkbox-container"> {/* Contenedor para el checkbox y la etiqueta */}
                 <input
                     type="checkbox"
                     id="disponible"
@@ -158,7 +157,7 @@ const PropiedadPage = () => {
                     checked={filtros.disponible}
                     onChange={handleFiltroChange}
                 />
-                <span className="checkbox-label"></span> 
+                <span className="checkbox-label"></span> {/* Etiqueta personalizada */}
                 </div>
             </div>
             <div className="filtro">
@@ -207,16 +206,16 @@ const PropiedadPage = () => {
 
         <div className="listado-propiedades">
           {Array.isArray(propiedades) && ( 
-            <ul className="tipo-propiedad-list">
+            <ul className="propiedad-list">
               {propiedades.length > 0 ? (
                 propiedades.map(propiedad => (
-                  <li key={propiedad.id} className="tipo-propiedad-card">
+                  <li key={propiedad.id} className="propiedad-card">
                     <h2>{propiedad.domicilio}</h2>
                     <p>Localidad: {propiedad.localidad}</p>
                     <p>Tipo: {propiedad.tipo_de_propiedad}</p>
-                    */
+                    <p>Disponible desde la fecha: {propiedad.fecha_inicio_disponibilidad}</p>
+                    <p>Costo por noche: {propiedad.valor_noche}</p>
                     {/* TODO: Agregar más detalles de la propiedad */}
-/*
                     <div className="card-actions">
                       <Link to={`/propiedad/${propiedad.id}`}>Ver detalle</Link>
                       <Link to={`/propiedad/editar/${propiedad.id}`}>Editar</Link>
@@ -243,4 +242,3 @@ const PropiedadPage = () => {
 };
 
 export default PropiedadPage;
-*/

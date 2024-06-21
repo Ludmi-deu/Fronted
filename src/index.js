@@ -10,9 +10,7 @@ import HeaderComponent from './components/HeaderComponent';
 import FooterComponent from './components/FooterComponent';
 import ReservaPage from './pages/reserva/ReservaPage';
 import NewReserva from './pages/reserva/NewReserva'
-
-
-
+import EditReserva from './pages/reserva/EditReserva';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -26,6 +24,7 @@ root.render(
         <Route path="/tipoPropiedad" element={<TipoPropiedadPage />}/>
         <Route path="/reservas" element={<ReservaPage />}/>
         <Route path="/reservas/nuevo" element={<NewReserva />}/>
+        <Route path="/reservas/editar/:id" element={<EditReserva/>}/>
       </Routes>
     </BrowserRouter>
     <FooterComponent/>
