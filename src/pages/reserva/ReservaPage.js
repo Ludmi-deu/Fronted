@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './ReservaPage.css';
+import '../../assets/styles/Pages.css';
 import { Link } from 'react-router-dom';
 
 const ReservaPage = () => {
@@ -79,7 +79,7 @@ const ReservaPage = () => {
   };
 
   return (
-    <div className="reservas-page">
+    <div className="page">
       <h1>Reservas</h1>
 
       {exito && mostrarExito && (
@@ -90,14 +90,14 @@ const ReservaPage = () => {
         <p className="error-message mostrar">Error: {error}</p>
       )}
 
-      <div className="reservas-header">
+      <div className="header">
         <Link to="/reservas/nuevo" className="btn btn-primary">Crear Nueva Reserva</Link>
       </div>
 
       {reservas.length > 0 ? (
-        <ul className="reservas-list">
+        <ul className="list">
           {reservas.map((reserva) => (
-            <li key={reserva.id} className="reservas-card">
+            <li key={reserva.id} className="card">
               <h2>{`${reserva.nombre_inquilino} ${reserva.apellido_inquilino}`}</h2>
               <div className="card-details">
                 <p>Propiedad: {reserva.domicilio}</p>
