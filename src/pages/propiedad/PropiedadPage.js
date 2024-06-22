@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import './PropiedadPage.css'; 
+import '../../assets/styles/PagePropiedad.css'; 
 import { fetchLocalidades } from '../../utils/api';
 
 const PropiedadPage = () => {

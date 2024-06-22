@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import './DetailPropiedad.css';
+import '../../assets/styles/Detail.css';
 import { fetchPropiedadPorId } from '../../utils/api'; // Importar la función
 
 
