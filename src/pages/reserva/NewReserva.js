@@ -148,7 +148,7 @@ const NewReserva = () => {
                     />
                 </div>
 
-                <button type="button">Crear Reserva</button>
+                <button type="submit">Crear Reserva</button>
                 <button type="button" onClick={() => navigate(-1)}>Volver</button>
             </form>
             {mensaje && (

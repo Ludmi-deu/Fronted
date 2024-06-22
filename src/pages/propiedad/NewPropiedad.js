@@ -103,7 +103,7 @@ const NewPropiedad = () => {
             return; 
         }
 
-        if (cantidadHabitaciones != ''){
+        if (cantidadHabitaciones !== ''){
             if(!/^\d+$/.test(cantidadHabitaciones)) {
                 setError('La cantidad de huéspedes debe ser un número entero.');
                 mostrarErrorOn();
@@ -124,7 +124,7 @@ const NewPropiedad = () => {
         }
 
 
-        if (cantidadBanios !=  ''){
+        if (cantidadBanios !==  ''){
             if(!/^\d+$/.test(cantidadBanios)) {
             setError('La cantidad de baños debe ser un número entero.');
             mostrarErrorOn();
@@ -282,7 +282,7 @@ const NewPropiedad = () => {
                         <input type="file" name="imagen" id="imagen" /> 
                     </div>
                 </div>
-                <button type='submit'>guardar</button>
+                <button type='submit'>Guardar</button>
                 <button type="button" onClick={() => navigate(-1)}>Volver</button>
             </form>
 

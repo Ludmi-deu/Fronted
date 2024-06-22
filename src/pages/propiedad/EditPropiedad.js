@@ -70,7 +70,6 @@ const EditPropiedad = () => {
 
         event.preventDefault();
         const formData = new FormData(event.target);
-        const dataToSend = formDataToObject(formData);
         
         const domicilio = formData.get('domicilio');
         const localidadId = formData.get('localidad_id');
@@ -94,26 +93,22 @@ const EditPropiedad = () => {
             return; 
         }
 
-        if (cantidadHabitaciones != ''){
+        if (cantidadHabitaciones !== ''){
             if(!/^\d+$/.test(cantidadHabitaciones)) {
                 setError('La cantidad de huéspedes debe ser un número entero.');
                 mostrarErrorOn();
                 return;
             }
-        } else {
-            delete dataToSend.cantidad_habitaciones;
-        }
+        } 
 
 
-        if (cantidadBanios !=  ''){
+        if (cantidadBanios !==  ''){
             if(!/^\d+$/.test(cantidadBanios)) {
             setError('La cantidad de baños debe ser un número entero.');
             mostrarErrorOn();
             return;
             }
-        } else {
-            delete dataToSend.cantidad_banios;
-        }
+        } 
 
         if (cantidadHuespedes.trim() === ''){
             setError('La cantidad de huéspedes no puede estar vacío.');
@@ -152,6 +147,17 @@ const EditPropiedad = () => {
         }
 
         try {
+            const dataToSend = {
+                domicilio:domicilio,
+                localidad_id:localidadId,
+                cantidad_habitaciones:cantidadHabitaciones,
+                cantidad_banios:cantidadBanios,
+                cantidad_huespedes:cantidadHuespedes,
+                fecha_inicio_disponibilidad:fechaInicioDisponibilidad,
+                cantidad_dias:cantidadDias,
+                valor_noche:valorNoche,
+            }
+
 
             const response = await fetch(`http://localhost/propiedades/${id}`, {
                 method: 'PUT',
@@ -189,8 +195,9 @@ const EditPropiedad = () => {
         <div className='edit-propiedad-page'>
             <h1>Editar Propiedad</h1>
             {error && mostrarError && (
-                <p className="error-message mostrar">Error: {error}</p>
+                <p className="error-message mostrar">Error: {error.message}</p>
             )}
+
             
             {mostrarExito && (
                 <p className="mensaje-exito mostrar">
@@ -280,7 +287,7 @@ const EditPropiedad = () => {
                         </div>
                     )}
                 </div>
-                <button type='submit'>guardar</button>
+                <button type='submit'>Guardar</button>
                 <button type="button" onClick={() => navigate(-1)}>Volver</button>
             </form>
             ) : (

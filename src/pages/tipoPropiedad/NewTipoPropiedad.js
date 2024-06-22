@@ -50,7 +50,7 @@ const NewTipoPropiedad = () => {
             onChange={(e) => setNombre(e.target.value)} 
           />
         </div>
-        <button type="button">Crear</button>
+        <button type='submit'>Crear</button>
         <button type="button" onClick={() => navigate(-1)}>Volver</button>
       </form>
       {mensaje && (
