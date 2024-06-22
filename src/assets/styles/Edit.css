@@ -1,5 +1,5 @@
 /* Estilos generales de la página */
-.edit-reserva-page {
+.edit-page {
     font-family: 'Poppins', sans-serif;
     display: flex;
     flex-direction: column;
@@ -12,7 +12,7 @@
     margin: 0 auto;
   }
   
-  .edit-reserva-page h1 {
+  .edit-page h1 {
     color: #333;
     font-size: 2.5rem;
     margin-bottom: 40px;
@@ -22,36 +22,34 @@
   }
   
   /* Estilos del formulario */
-  .edit-reserva-page form {
+  .edit-page form {
     display: flex;
     flex-direction: column;
     gap: 25px;
     width: 100%;
   }
   
-  .edit-reserva-page label {
+  .edit-page label {
     font-weight: bold;
     color: #555;
   }
-  
-  .edit-reserva-page input[type="text"] {
-    padding: 15px;
-    border: none;
-    border-bottom: 2px solid #ccc;
-    border-radius: 0;
-    font-size: 1.1rem;
-    width: 100%;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease;
+
+  .edit-page input[type="text"],
+  .edit-page input[type="date"],
+  .edit-page input[type="number"],
+  .edit-page input[type="file"],
+  .edit-page select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 100%; /* Ocupar todo el ancho de la columna */
   }
   
-  .edit-reserva-page input[type="text"]:focus {
-    outline: none;
-    border-color: #28a745;
-  }
+  
   
   /* Estilos del botón */
-  .edit-reserva-page button[type="submit"] {
+  .edit-page button[type="submit"] {
     background-color: #28a745;
     color: rgb(255, 255, 255);
     padding: 15px 30px;
@@ -62,21 +60,21 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
   }
   
-  .edit-reserva-page button[type="submit"]:hover {
+  .edit-page button[type="submit"]:hover {
     background-color: #218838;
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   
   /* Estilos para el mensaje */
-  .edit-reserva-page p {
+  .edit-page p {
     margin-top: 30px;
     text-align: center;
   }
   
   /* Estilos para mensajes de éxito y error */
-  .edit-reserva-page .mensaje-exito,
-  .edit-reserva-page .mensaje-error {
+  .edit-page .mensaje-exito,
+  .edit-page .mensaje-error {
       background-color: #d4edda; /* Fondo verde claro */
       color: #155724; /* Verde oscuro */
       padding: 10px 15px;
@@ -88,12 +86,12 @@
       gap: 10px;
   }
   
-  .edit-reserva-page .mensaje-exito {
+  .edit-page .mensaje-exito {
     border-color: #c3e6cb; /* Borde verde claro */
     color: #155724; /* Verde oscuro */
   }
   
-  .edit-reserva-page .mensaje-error {
+  .edit-page .mensaje-error {
     background-color: #f8d7da; /* Fondo rojo claro */
     color: #721c24; /* Rojo oscuro */
     padding: 10px 15px;
@@ -105,8 +103,8 @@
     transition: opacity 0.5s ease, transform 0.5s ease;
   }
   
-  .edit-reserva-page .mensaje-exito.mostrar,
-  .edit-reserva-page .mensaje-error.mostrar {
+  .edit-page .mensaje-exito.mostrar,
+  .edit-page .mensaje-error.mostrar {
     opacity: 1;
     transform: translateY(0);
   }

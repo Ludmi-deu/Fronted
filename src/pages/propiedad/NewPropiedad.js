@@ -1,6 +1,6 @@
 import React, {useState,useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
-import './PropiedadEditPage.css'; 
+import './EditPropiedad.css'; 
 
 import { fetchLocalidades, fetchTiposPropiedad } from '../../utils/api';
 

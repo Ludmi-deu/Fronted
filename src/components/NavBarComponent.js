@@ -8,7 +8,7 @@ function NavbarComponent() {
     <nav className="navbar">
       <ul>
         <a href="/tipoPropiedad" className="nav-item">Tipo de Propiedad</a>
-        <a href="/propiedades" className="nav-item">Propiedades</a>
+        <a href="/" className="nav-item">Propiedades</a>
         <a href="/reservas" className="nav-item">Reservas</a>
       </ul>
     </nav>

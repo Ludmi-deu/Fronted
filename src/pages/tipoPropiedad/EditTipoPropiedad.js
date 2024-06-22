@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate   } from 'react-router-dom';
-import './EditTipoPropiedad.css';
+import '../../assets/styles/Edit.css';
 
 
 const EditTipoPropiedad = () => {
@@ -11,9 +11,6 @@ const EditTipoPropiedad = () => {
   const [mensaje, setMensaje] = useState('');
   const navigate = useNavigate(); // Obtener la función de navegación
 
-  const handleVolver = () => {
-    navigate(-1); 
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,7 +42,7 @@ const EditTipoPropiedad = () => {
   };
 
   return (
-    <div className="edit-tipo-propiedad-page">
+    <div className="edit-page">
       <h1>Editar Tipo de Propiedad</h1>
       <form onSubmit={handleSubmit}>
         <div>
@@ -59,7 +56,7 @@ const EditTipoPropiedad = () => {
         </div>
         <button type="submit">Guardar Cambios</button>
       </form>
-      <button type="button" onClick={handleVolver}>Volver</button> {/* Botón Volver */}
+      <button type="button" onClick={() => navigate(-1)}>Volver</button>
       {mensaje && (
         <p className={`mensaje-${mensaje.includes('Error') ? 'error' : 'exito'} mostrar`}>
           {mensaje}

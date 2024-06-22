@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './TipoPropiedadPage.css';
+import '../../assets/styles/Pages.css';
 import { Link } from 'react-router-dom'; // Importar Link
 
 
@@ -67,7 +67,7 @@ const TipoPropiedadPage = () => {
   };
 
   return (
-    <div className="tipo-propiedad-page">
+    <div className="page">
       
       <h1>Tipos de propiedad</h1>
 
@@ -84,9 +84,9 @@ const TipoPropiedadPage = () => {
       </Link>
 
         {Array.isArray(tiposPropiedad) && tiposPropiedad.length > 0 ? (
-        <ul className="tipo-propiedad-list">
+        <ul className="list">
           {tiposPropiedad.map(tipo => (
-            <li key={tipo.id} className="tipo-propiedad-card">
+            <li key={tipo.id} className="card">
               <h2>{tipo.nombre}</h2>
               <div className="card-actions"> {/* Nuevo contenedor */}
               <Link to={`/tipo-propiedad/editar/${tipo.id}/${tipo.nombre}`}>

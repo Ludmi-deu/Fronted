@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import './EditReserva.css';
+import '../../assets/styles/Edit.css';
 import { fetchInquilinos, fetchPropiedades, fetchReservaPorId } from '../../utils/api';
 
 const EditReservaPage = () => {
@@ -142,7 +142,7 @@ const EditReservaPage = () => {
   };
 
   return (
-    <div className='edit-reserva-page'>
+    <div className='edit-page'>
       <h1>Editar Reserva</h1>
       {error && mostrarError && (
         <p className="error-message mostrar">Error: {error}</p>

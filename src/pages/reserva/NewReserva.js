@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import './NewReserva.css';
+import { useNavigate } from 'react-router-dom';
+import '../../assets/styles/New.css';
 import { fetchPropiedades } from '../../utils/api';
 import { fetchInquilinos } from '../../utils/api';
 
 const NewReserva = () => {
+    const navigate = useNavigate();
     const [propiedades, setPropiedades] = useState([]);
     const [inquilinos, setInquilinos] = useState([]);
     const [propiedadId, setPropiedadId] = useState('');
@@ -83,7 +85,7 @@ const NewReserva = () => {
     };
 
     return (
-        <div className="new-reserva-page">
+        <div className="new-page">
             <h1>Crear una Nueva Reserva</h1>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
@@ -146,7 +148,8 @@ const NewReserva = () => {
                     />
                 </div>
 
-                <button type="submit">Crear Reserva</button>
+                <button type="button">Crear Reserva</button>
+                <button type="button" onClick={() => navigate(-1)}>Volver</button>
             </form>
             {mensaje && (
                 <p className={mensaje.includes('Error') ? 'mensaje-error' : 'mensaje-exito'}>

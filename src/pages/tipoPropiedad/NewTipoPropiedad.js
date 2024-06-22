@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import './NewTipoPropiedad.css';
+import { useNavigate } from 'react-router-dom';
+import '../../assets/styles/New.css';
 
 const NewTipoPropiedad = () => {
+  const navigate = useNavigate();
   const [nombre, setNombre] = useState('');
   const [mensaje, setMensaje] = useState(''); // Para mostrar el mensaje del servidor
 
@@ -36,7 +38,7 @@ const NewTipoPropiedad = () => {
   };
 
   return (
-    <div className="new-tipo-propiedad-page">
+    <div className="new-page">
       <h1>Inserta un Nuevo Tipo de Propiedad</h1>
       <form onSubmit={handleSubmit}>
         <div>
@@ -48,7 +50,8 @@ const NewTipoPropiedad = () => {
             onChange={(e) => setNombre(e.target.value)} 
           />
         </div>
-        <button type="submit">Crear</button>
+        <button type="button">Crear</button>
+        <button type="button" onClick={() => navigate(-1)}>Volver</button>
       </form>
       {mensaje && (
         <p className={mensaje.includes('Error') ? 'mensaje-error' : 'mensaje-exito'}>

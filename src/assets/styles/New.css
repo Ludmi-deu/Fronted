@@ -1,5 +1,4 @@
-/* Estilos generales de la página */
-.new-reserva-page {
+.new-page {
     font-family: 'Poppins', sans-serif; /* Fuente moderna y elegante */
     display: flex;
     flex-direction: column;
@@ -12,7 +11,7 @@
     margin: 0 auto; /* Centrar el formulario en la página */
   }
   
-  .new-reserva-page h1 {
+  .new-page h1 {
     color: #333; /* Gris oscuro */
     font-size: 2.5rem;
     margin-bottom: 40px;
@@ -22,36 +21,33 @@
   }
   
   /* Estilos del formulario */
-  .new-reserva-page form {
+  .new-page form {
     display: flex;
     flex-direction: column;
     gap: 25px; /* Más espacio entre elementos */
     width: 100%;
   }
   
-  .new-reserva-page label {
+  .new-page label {
     font-weight: bold;
     color: #555; /* Gris más oscuro para las etiquetas */
   }
   
-  .new-reserva-page input[type="text"] {
-    padding: 15px; /* Más padding */
-    border: none; /* Sin borde */
-    border-bottom: 2px solid #ccc; /* Borde inferior sutil */
-    border-radius: 0; /* Sin bordes redondeados */
-    font-size: 1.1rem;
-    width: 100%;
-    box-sizing: border-box; /* Incluir padding y borde en el ancho */
-    transition: border-color 0.3s ease; /* Transición suave para el borde */
-  }
-  
-  .new-reserva-page input[type="text"]:focus {
-    outline: none; /* Quitar contorno al enfocar */
-    border-color: #28a745; /* Cambiar color del borde al enfocar */
+  .new-page input[type="text"],
+  .new-page input[type="date"],
+  .new-page input[type="number"],
+  .new-page input[type="file"],
+  .new-page select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 100%; /* Ocupar todo el ancho de la columna */
   }
   
   /* Estilos del botón */
-  .new-reserva-page button[type="submit"] {
+  .new-page button[type="button"] {
+    grid-column: span 2;
     background-color: #28a745;
     color: white;
     padding: 15px 30px; /* Botón más grande */
@@ -62,19 +58,20 @@
     transition: background-color 0.3s ease, transform 0.2s ease; /* Transición de color y transformación */
   }
   
-  .new-reserva-page button[type="submit"]:hover {
-    background-color: #218838;
-    transform: translateY(-2px); /* Elevar el botón al pasar el mouse */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra en hover */
+  .new-page button[type="button"]:hover {
+    grid-column: span 2;
+    background-color: #00400f; /* Rojo más oscuro en hover */
+    transform: translateY(-2px); /* Efecto de elevación */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra más intensa en hover */
   }
   
   /* Estilos para el mensaje */
-  .new-reserva-page p {
+  .new-page p {
     margin-top: 30px;
     text-align: center;
   }
   
-  .new-reserva-page .mensaje-exito {
+  .new-page .mensaje-exito {
     background-color: #d4edda; /* Fondo verde claro */
     color: #155724; /* Verde oscuro */
     padding: 10px 15px;
@@ -86,12 +83,12 @@
     gap: 10px;
   }
 
-  .new-reserva-page .mensaje-exito::before {
+  .new-page .mensaje-exito::before {
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
   }
 
-  .new-reserva-page .mensaje-error {
+  .new-page .mensaje-error {
     background-color: #f8d7da; /* Fondo rojo claro */
     color: #721c24; /* Rojo oscuro */
     padding: 10px 15px;
@@ -104,8 +101,8 @@
 
   }
 
-.new-reserva-page .mensaje-exito.mostrar,
-.new-reserva-page .mensaje-error.mostrar {
+.new-page .mensaje-exito.mostrar,
+.new-page .mensaje-error.mostrar {
   opacity: 1;
   transform: translateY(0);
 }
