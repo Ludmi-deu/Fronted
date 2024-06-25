@@ -1,6 +1,7 @@
 import React, {useState,useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import '../../assets/styles/EditPropiedades.css'; 
+import '../../assets/styles/Mensajes.css';
 
 import { fetchPropiedadPorId, fetchLocalidades, fetchTiposPropiedad } from '../../utils/api';
 
@@ -15,7 +16,7 @@ const EditPropiedad = () => {
     const [mostrarError, setMostrarError] = useState(false);
     const [mostrarExito, setMostrarExito] = useState(false);
     const [exito, setExito] = useState(false);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(false);
 
 
     useEffect(()=>{
@@ -58,6 +59,15 @@ const EditPropiedad = () => {
         }, 5000);
     }
 
+    function devolverMensajeError(errores){
+        let mensajesError = ''; 
+        for (const campo in errores) {
+            const mensajeError = errores[campo];
+            mensajesError += `${mensajeError}.\n`; 
+        }
+        return mensajesError;
+    }
+
     const handleSubmit = async(event) => {
 
         const formDataToObject = (formData) => {
@@ -70,6 +80,7 @@ const EditPropiedad = () => {
 
         event.preventDefault();
         const formData = new FormData(event.target);
+        const dataToSend = formDataToObject(formData);
         
         const domicilio = formData.get('domicilio');
         const localidadId = formData.get('localidad_id');
@@ -79,13 +90,15 @@ const EditPropiedad = () => {
         const fechaInicioDisponibilidad = formData.get('fecha_inicio_disponibilidad');
         const cantidadDias = formData.get('cantidad_dias');
         const valorNoche = formData.get('valor_noche');
+        const imagen = formData.get('imagen');
 
-
+  
         if (domicilio.trim() === '') { 
             setError('El domicilio es obligatorio.');
             mostrarErrorOn();
             return; 
         }
+
 
         if (localidadId === '') { 
             setError('Debes seleccionar una localidad.');
@@ -93,22 +106,36 @@ const EditPropiedad = () => {
             return; 
         }
 
-        if (cantidadHabitaciones !== ''){
+        if (cantidadHabitaciones != ''){
             if(!/^\d+$/.test(cantidadHabitaciones)) {
                 setError('La cantidad de huéspedes debe ser un número entero.');
                 mostrarErrorOn();
                 return;
             }
-        } 
+        } else {
+            delete dataToSend.cantidad_habitaciones;
+        }
+        
+        if (imagen.name != 0) {
+            const nombreImagen = imagen.name.split('.')[0]; // Nombre sin extensión
+            const extensionImagen = imagen.name.split('.').pop(); // Extensión
+
+            dataToSend.imagen = nombreImagen;
+            dataToSend.tipo_imagen = extensionImagen;
+        } else {
+            delete dataToSend.imagen;
+        }
 
 
-        if (cantidadBanios !==  ''){
+        if (cantidadBanios !=  ''){
             if(!/^\d+$/.test(cantidadBanios)) {
             setError('La cantidad de baños debe ser un número entero.');
             mostrarErrorOn();
             return;
             }
-        } 
+        } else {
+            delete dataToSend.cantidad_banios;
+        }
 
         if (cantidadHuespedes.trim() === ''){
             setError('La cantidad de huéspedes no puede estar vacío.');
@@ -147,17 +174,6 @@ const EditPropiedad = () => {
         }
 
         try {
-            const dataToSend = {
-                domicilio:domicilio,
-                localidad_id:localidadId,
-                cantidad_habitaciones:cantidadHabitaciones,
-                cantidad_banios:cantidadBanios,
-                cantidad_huespedes:cantidadHuespedes,
-                fecha_inicio_disponibilidad:fechaInicioDisponibilidad,
-                cantidad_dias:cantidadDias,
-                valor_noche:valorNoche,
-            }
-
 
             const response = await fetch(`http://localhost/propiedades/${id}`, {
                 method: 'PUT',
@@ -167,25 +183,20 @@ const EditPropiedad = () => {
                 body: JSON.stringify(dataToSend),
             });
 
-            if(response.ok){
-                const data = await response.json();
-                if(data.status ===  'success'){
-                    console.log('success');
-                    setExito(data.message);
-                    mostrarExitoOn();
-                    setPropiedad(await fetchPropiedadPorId(id));
-                } else {
-                    console.log('error: no success ',data.message);
-                    setError(data.message);
-                    mostrarErrorOn();
-                }
-            } else {
+            const data = await response.json();
+
+            if (!response.ok) {
+                setError(devolverMensajeError(data.message.error))
+                console.log(data.message.error);
                 throw new Error('Error en la respuesta de la API');
             }
 
+            setExito(data.message);
+            mostrarExitoOn();
+            setPropiedad(await fetchPropiedadPorId(id));
+
         } catch(error){
             console.log('error ', error);
-            setError(error);
             mostrarErrorOn();
         }
     }
@@ -195,12 +206,12 @@ const EditPropiedad = () => {
         <div className='edit-propiedad-page'>
             <h1>Editar Propiedad</h1>
             {error && mostrarError && (
-                <p className="error-message mostrar">Error: {error.message}</p>
+                <p className="mensaje-error">Error: {error}</p>
             )}
 
             
             {mostrarExito && (
-                <p className="mensaje-exito mostrar">
+                <p className="mensaje-exito">
                     {exito}
                 </p>
             )} 

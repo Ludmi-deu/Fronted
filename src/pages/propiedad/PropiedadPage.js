@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../../assets/styles/PagePropiedad.css'; 
+import '../../assets/styles/Mensajes.css';
 import { fetchLocalidades } from '../../utils/api';
 
 const PropiedadPage = () => {
@@ -54,22 +55,21 @@ const PropiedadPage = () => {
         ).toString();
   
         const response = await fetch(`http://localhost/propiedades${queryParams ? '?' + queryParams : ''}`);
-  
-        if (!response.ok) {
-          throw new Error('Error en la respuesta de la API');
-        }
-  
+
         const data = await response.json();
-        if (data.status === 'success') {
-          setPropiedades(data.data);
-        } else {
-          throw new Error(data.message || 'Error desconocido en la API');
+
+        if (!response.ok) {
+          throw new Error(data.message);
         }
+  
+        setPropiedades(data.data);
+        
       } catch (error) {
         console.error('Error al obtener las propiedades:', error);
-        setError(error.message);
+        setError("Hubo un problema. Intente de nuevo");
         mostrarErrorOn() 
       }
+
     };
 
     fetchPropiedades();
@@ -81,7 +81,7 @@ const PropiedadPage = () => {
         const localidadesData = await fetchLocalidades();
         setLocalidades(localidadesData);
       } catch (error) {
-        setError(error.message);
+        console.log(error);
       }
     };
 
@@ -104,22 +104,19 @@ const PropiedadPage = () => {
           method: 'DELETE',
         });
 
+        const data = await response.json();
+
         if (!response.ok) {
+          setError(data.message)
           throw new Error('Error en la respuesta de la API');
         }
 
-        const data = await response.json();
-        if (data.status === 'success') {
-          setPropiedades(propiedades.filter(propiedad => propiedad.id !== propiedadId));
-          setExito(data.message);
-          mostrarExitoOn()
-        } else {
-          setError(data.message || 'Error desconocido en la API');
-          mostrarErrorOn()
-        }
+        setPropiedades(propiedades.filter(propiedad => propiedad.id !== propiedadId));
+        setExito(data.message);
+        mostrarExitoOn()
+        
       } catch (error) {
         console.error('Error al eliminar la propiedad:', error);
-        setError('Error al eliminar la propiedad');
         mostrarErrorOn()
       }
     }
@@ -131,11 +128,11 @@ const PropiedadPage = () => {
       <h1>Propiedades</h1>
   
       {error && mostrarError && (
-        <p className="error-message mostrar">Error: {error}</p>
+        <p className="mensaje-error">Error: {error}</p>
       )}
       
       {exito && mostrarExito && (
-        <p className="mensaje-exito mostrar">
+        <p className="mensaje-exito">
           {exito}
         </p>
       )} 
@@ -202,7 +199,7 @@ const PropiedadPage = () => {
 
         <div className="listado-propiedades">
           {Array.isArray(propiedades) && ( 
-            <ul className="propiedad-list">
+            <div className="propiedad-list">
               {propiedades.length > 0 ? (
                 propiedades.map(propiedad => (
                   <li key={propiedad.id} className="propiedad-card">
@@ -227,7 +224,7 @@ const PropiedadPage = () => {
               ) : (
                 <p>No hay propiedades disponibles.</p>
               )}
-            </ul>
+            </div>
           )}
         </div>
       </div>

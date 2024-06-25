@@ -1,17 +1,41 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../assets/styles/New.css';
+import '../../assets/styles/Mensajes.css';
 
 const NewTipoPropiedad = () => {
   const navigate = useNavigate();
   const [nombre, setNombre] = useState('');
-  const [mensaje, setMensaje] = useState(''); // Para mostrar el mensaje del servidor
+  const [mostrarError, setMostrarError] = useState(false);
+  const [mostrarExito, setMostrarExito] = useState(false);
+  const [error, setError] = useState(null);
+  const [exito, setExito] = useState(null);
+
+
+  function mostrarErrorOn() {
+    setMostrarError(true);
+    setTimeout(() => {
+      setMostrarError(false);
+      setError(null);
+      setExito(null);
+    }, 5000);
+  }
+  
+  function mostrarExitoOn() {
+    setMostrarExito(true);
+    setTimeout(() => {
+      setMostrarExito(false);
+      setError(null);
+      setExito(null);
+    }, 5000);
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Evitar recarga de página
 
     if (nombre.trim() === '') { // Validar que el nombre no esté vacío
-      setMensaje('El nombre es obligatorio');
+      setError('El nombre es obligatorio');
+      mostrarErrorOn();
       return;
     }
 
@@ -24,22 +48,33 @@ const NewTipoPropiedad = () => {
         body: JSON.stringify({ nombre }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
+        setError(data.error.nombre);
         throw new Error('Error en la respuesta de la API');
       }
+      
+      setExito(data.message);
+      mostrarExitoOn();
 
-      const data = await response.json();
-      setMensaje(data.message); // Mostrar el mensaje del servidor
-      setNombre(''); // Limpiar el campo de nombre
     } catch (error) {
-      console.error('Error al crear el tipo de propiedad:', error);
-      setMensaje('Error al crear el tipo de propiedad');
+      mostrarErrorOn();
+      console.error('Error al actualizar el tipo de propiedad:', error);
     }
   };
 
   return (
     <div className="new-page">
       <h1>Inserta un Nuevo Tipo de Propiedad</h1>
+      {error && mostrarError && (
+        <p className="mensaje-error">Error: {error}</p>
+      )}
+      {mostrarExito && (
+        <p className="mensaje-exito">
+          {exito}
+        </p>
+      )}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="nombre">Nombre:</label>
@@ -53,11 +88,6 @@ const NewTipoPropiedad = () => {
         <button type='submit'>Crear</button>
         <button type="button" onClick={() => navigate(-1)}>Volver</button>
       </form>
-      {mensaje && (
-        <p className={mensaje.includes('Error') ? 'mensaje-error' : 'mensaje-exito'}>
-          {mensaje}
-        </p>
-      )}
     </div>
   );
 };

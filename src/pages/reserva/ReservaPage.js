@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../../assets/styles/Pages.css';
 import { Link } from 'react-router-dom';
+import '../../assets/styles/Mensajes.css';
+import { fetchReservas } from '../../utils/api';
 
 const ReservaPage = () => {
   const [reservas, setReservas] = useState([]);
@@ -28,26 +30,17 @@ const ReservaPage = () => {
   }
 
   useEffect(() => {
-    const fetchReservas = async () => {
+    
+    const cargarDatos = async () => {
       try {
-        const response = await fetch('http://localhost/reservas'); // Ajusta el puerto según tu configuración Docker
-        if (!response.ok) {
-          throw new Error('Error en la respuesta de la API');
-        }
-        const data = await response.json();
-        if (data.status === 'success') {
-          setReservas(data.data);
-        } else {
-          throw new Error(data.message || 'Error desconocido en la API');
-        }
-      } catch (error) {
-        console.error('Error al obtener las reservas:');
-        setError(error.message);
-        mostrarErrorOn()
+          const reservasData = await fetchReservas();
+          setReservas(reservasData)
+      } catch (error){
+          console.log(error);
       }
     };
 
-    fetchReservas();
+    cargarDatos();
   }, []);
 
   const handleEliminarReserva = async (EliminarReserva) => {
@@ -57,23 +50,20 @@ const ReservaPage = () => {
           method: 'DELETE',
         });
 
+        const data = await response.json();
+
         if (!response.ok) {
+          setError(data.message);
           throw new Error('Error en la respuesta de la API');
         }
 
-        const data = await response.json();
-        if (data.status === 'success') {
         setReservas(reservas.filter(reserva => reserva.id !== EliminarReserva.id));
         setExito(data.message);
         mostrarExitoOn()
-      } else {
-        setError(data.message || 'Error desconocido en la API');
-        mostrarErrorOn()
-      }
+
     } catch (error) {
-      console.error('Error al eliminar la reserva:', error);
-      setError('Error al eliminar la reserva');
       mostrarErrorOn()
+      console.error('Error al eliminar la reserva:', error);
       }
     }
   };
@@ -83,11 +73,11 @@ const ReservaPage = () => {
       <h1>Reservas</h1>
 
       {exito && mostrarExito && (
-        <p className="mensaje-exito mostrar">{exito}</p>
+        <p className="mensaje-exito">{exito}</p>
     ) }
 
       {error && mostrarError &&  (
-        <p className="error-message mostrar">Error: {error}</p>
+        <p className="mensaje-error">Error: {error}</p>
       )}
 
       <div className="header">

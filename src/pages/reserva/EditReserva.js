@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../../assets/styles/Edit.css';
+import '../../assets/styles/Mensajes.css';
+
 import { fetchInquilinos, fetchPropiedades, fetchReservaPorId } from '../../utils/api';
 
 const EditReservaPage = () => {
@@ -49,6 +51,15 @@ const EditReservaPage = () => {
       setError(null);
       setExito(null);
     }, 5000);
+  }
+
+  function devolverMensajeError(errores){
+    let mensajesError = ''; 
+    for (const campo in errores) {
+        const mensajeError = errores[campo];
+        mensajesError += `${mensajeError}.\n`; 
+    }
+    return mensajesError;
   }
 
   const handleSubmit = async (event) => {
@@ -101,6 +112,7 @@ const EditReservaPage = () => {
     }
 
     try {
+      
       const dataToSend = {
         inquilino_id: inquilinoId,
         propiedad_id: propiedadId,
@@ -117,26 +129,19 @@ const EditReservaPage = () => {
         body: JSON.stringify(dataToSend),
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.status === 'success') {
-          console.log('success');
-          setExito(data.message);
-          mostrarExitoOn();
-          setReserva(await fetchReservaPorId(id));
-        } else {
-          console.log('error: no success ',data.message);
-          setError(data.message);
-          mostrarErrorOn();
-        }
-      } else {
-        const errorResponse = await response.json();
-        setError(errorResponse.message || 'Error desconocido');
-        mostrarErrorOn();
+      const data = await response.json();
+
+      if (!response.ok) {
+          setError(devolverMensajeError(data.message.error));
+          throw new Error('Error en la respuesta de la API');
       }
+
+      setExito(data.message);
+      mostrarExitoOn();
+      setReserva(await fetchReservaPorId(id));
+
     } catch (error) {
       console.log(error);
-      setError(error.message || 'Error desconocido');
       mostrarErrorOn();
     }
   };
@@ -145,10 +150,10 @@ const EditReservaPage = () => {
     <div className='edit-page'>
       <h1>Editar Reserva</h1>
       {error && mostrarError && (
-        <p className="error-message mostrar">Error: {error}</p>
+        <p className="mensaje-error">Error: {error}</p>
       )}
       {mostrarExito && (
-        <p className="mensaje-exito mostrar">
+        <p className="mensaje-exito">
           {exito}
         </p>
       )}
@@ -197,8 +202,6 @@ const EditReservaPage = () => {
       ) : (
         <p>Cargando reserva...</p>
       )}
-
-
 
     </div>
   );
