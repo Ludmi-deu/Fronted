@@ -11,8 +11,8 @@ const navigate = useNavigate();
 const { id } = useParams();
 const [localidades,setLocalidades] = useState([]);
 const [tiposPropiedad,setTipoPropiedad] = useState([]);
-const [localidadId,setLocalidadId] = useState([]);
-const [tipoPropiedadId,setTipoPropiedadId] = useState([]);
+const [localidadId,setLocalidadId] = useState('');
+const [tipoPropiedadId,setTipoPropiedadId] = useState('');
 const [mostrarError, setMostrarError] = useState(false);
 const [mostrarExito, setMostrarExito] = useState(false);
 const [exito, setExito] = useState(false);
@@ -78,9 +78,9 @@ const handleSubmit = async(event) => {
 
     const formData = new FormData(event.target);
     const dataToSend = formDataToObject(formData);
-
+    dataToSend.localidad_id = localidadId; // Asignar el valor de localidadId
+    dataToSend.tipo_propiedad_id = tipoPropiedadId;
     const domicilio = formData.get('domicilio');
-    const localidadId = formData.get('localidad_id');
     const cantidadHabitaciones = formData.get('cantidad_habitaciones');
     const cantidadBanios = formData.get('cantidad_banios');
     const cantidadHuespedes = formData.get('cantidad_huespedes');
@@ -178,13 +178,13 @@ const handleSubmit = async(event) => {
 
     try {
 
-        const response = await fetch(`http://localhost/propiedades`, {
+        const response = await fetch (`http://localhost/propiedades`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(dataToSend)
-        });
+    });
 
         const data = await response.json();
 
